@@ -226,5 +226,11 @@ object NewListTest extends  App {
   // Reudction operation here
   println(anoterlistOfInt.fold(0)((x, y) => x + y))
 
+  val combinations = for {
+    n <- listOfInt
+    string <- listOfStrings
+  } yield n + "-" + string
+
+  println(combinations)
 
 }
