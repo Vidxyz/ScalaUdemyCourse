@@ -1,4 +1,4 @@
-package lectures.part3functionalprogramming
+package lectures.part3fp
 
 object WhatsAFunction extends App {
 
