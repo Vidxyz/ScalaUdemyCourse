@@ -30,7 +30,7 @@ object Options extends App {
   println(myFirstOption.isEmpty)
   println(myFirstOption.get) // Unsafe - throws NPE - DO NOT USE THIS (in general)
 
-
+  println("*****")
   // map, flatMap, filter
   println(myFirstOption.map(_ * 2))
   println(myFirstOption.filter(x => x > 10))
@@ -60,5 +60,51 @@ object Options extends App {
   }
 
   // Try to establish a connection, if so - print the connect method
+  val host = config.get("host")
+  val port = config.get("port")
+
+  /*
+  if (h != null)  {
+    if (p != null) {
+      connection.apply(h, p)
+
+   return null
+   */
+
+  val connection = host.flatMap(h => port.flatMap(p => Connection.apply(h, p)))
+
+  /*
+  if c is not null
+    return c.connect
+  return null
+   */
+  val connectionStatus = connection.map(c => c.connect)
+  // if connectionsattus is null, println (none) else print (some(connectionstatus.get)))
+  println(connectionStatus)
+  // if status is not equal to null,
+  // println(status)
+  connectionStatus.foreach(println)
+
+  println("*** CHAINED SOLUTION ***")
+
+  // Another way
+  config.get("host")
+    .flatMap(host => config.get("port")
+      .flatMap(port => Connection(host, port)
+        .map(connection => connection.connect)))
+    .foreach(println)
+
+
+  // For comprehensions, most readable way
+  // Options are kinda like list with a max size of ONE AT MOST
+  println("**** FOR COMPREHENSIONS")
+
+  val connectionStatus2 = for {
+    host <- config.get("host")
+    port <- config.get("port")
+    connection <- Connection(host, port)
+  } yield connection.connect
+
+  connectionStatus2.foreach(println)
 
 }
